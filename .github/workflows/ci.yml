@@ -18,11 +18,11 @@ jobs:
 
     - name: Build all Docker services
       run: |
-        docker-compose build
+        docker compose build
 
     - name: Test services (health check)
       run: |
-        docker-compose up -d
+        docker compose up -d
         sleep 10
         curl -f http://localhost:8080/auth || exit 1
         curl -f http://localhost:8080/game || exit 1
