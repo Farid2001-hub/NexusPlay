@@ -1,15 +1,9 @@
 const express = require('express');
 require('dotenv').config();
-const client = require('prom-client');
-
 const app = express();
-const register = new client.Registry();
-client.collectDefaultMetrics({ register });
 
-app.get('/auth', (req, res) => res.send('Auth OK'));
-app.get('/metrics', async (req, res) => {
-  res.set('Content-Type', register.contentType);
-  res.end(await register.metrics());
+app.get('/auth', (req, res) => {
+  res.send(`Auth OK - secret=${process.env.AUTH_SECRET}`);
 });
 
-app.listen(3001, () => console.log('Auth Service on 3001'));
+app.listen(3001, () => console.log('Auth Service on port 3001'));
