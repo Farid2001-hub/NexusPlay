@@ -1,3 +1,11 @@
+
+Etudiants :
+
+Hamza FARID
+Iman ESSAMA
+Toure Yacouba
+
+
 # Microservices Node.js avec Gateway, Monitoring et CI/CD
 
 Ce projet est une architecture de microservices avec des services `auth` et `game`, une passerelle NGINX, des outils de monitoring (Prometheus, Grafana), un cache Redis, un simulateur d'email (Mailhog) et une intégration continue avec GitHub Actions.
