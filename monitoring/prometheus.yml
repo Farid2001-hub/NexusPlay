@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'auth-service'
+    static_configs:
+      - targets: ['localhost:3001']
+  - job_name: 'game-service'
+    static_configs:
+      - targets: ['localhost:3002']
