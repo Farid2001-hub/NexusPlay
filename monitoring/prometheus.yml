@@ -4,7 +4,8 @@ global:
 scrape_configs:
   - job_name: 'auth-service'
     static_configs:
-      - targets: ['localhost:3001']
+      - targets: ['auth-service:3001']  # utiliser le nom de service docker
+
   - job_name: 'game-service'
     static_configs:
-      - targets: ['localhost:3002']
+      - targets: ['game-service:3002']  # idem ici
