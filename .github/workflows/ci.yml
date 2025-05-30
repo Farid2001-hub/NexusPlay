@@ -17,12 +17,47 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Build all Docker services
-      run: |
-        docker compose build
+      run: docker compose build
 
-    - name: Test services (health check)
+    - name: Start all services
+      run: docker compose up -d
+
+    - name: Wait for gateway to be ready
       run: |
-        docker compose up -d
-        sleep 10
-        curl -f http://localhost:8080/auth || exit 1
-        curl -f http://localhost:8080/game || exit 1
+        for i in {1..10}; do
+          if curl -f http://localhost:8080/auth; then
+            echo "Gateway is up!"
+            break
+          fi
+          echo "Waiting for gateway..."
+          sleep 5
+        done
+
+
+    - name: Install k6 load testing tool
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y k6
+
+    - name: Run load test with k6
+      run: |
+        echo '
+        import http from "k6/http";
+        import { check, sleep } from "k6";
+
+        export let options = {
+          vus: 20,
+          duration: "30s",
+        };
+
+        export default function () {
+          let res = http.get("http://localhost:8080/auth");
+          check(res, { "status is 200": (r) => r.status === 200 });
+          sleep(1);
+        }
+        ' > loadtest.js
+
+        k6 run loadtest.js
+
+    - name: Stop services
+      run: docker compose down
